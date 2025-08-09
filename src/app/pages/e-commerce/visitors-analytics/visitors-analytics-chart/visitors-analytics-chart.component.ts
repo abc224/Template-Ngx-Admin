@@ -1,23 +1,18 @@
-import { delay, takeWhile } from 'rxjs/operators';
-import { AfterViewInit, Component, Input, OnDestroy } from '@angular/core';
-import { NbThemeService } from '@nebular/theme';
-import { LayoutService } from '../../../../@core/utils';
-import { OutlineData } from '../../../../@core/data/visitors-analytics';
+import { delay, takeWhile } from "rxjs/operators";
+import { AfterViewInit, Component, Input, OnDestroy } from "@angular/core";
+import { NbThemeService } from "@nebular/theme";
+import { LayoutService } from "../../../../@core/utils";
+import { OutlineData } from "../../../../@core/data/visitors-analytics";
+import * as echarts from "echarts/types/dist/echarts";
 
 @Component({
-  selector: 'ngx-visitors-analytics-chart',
-  styleUrls: ['./visitors-analytics-chart.component.scss'],
-  template: `
-    <div echarts
-         [options]="option"
-         [merge]="option"
-         class="echart"
-         (chartInit)="onChartInit($event)">
-    </div>
-  `,
+  selector: "ngx-visitors-analytics-chart",
+  styleUrls: ["./visitors-analytics-chart.component.scss"],
+  template: ` <div></div> `,
 })
-export class ECommerceVisitorsAnalyticsChartComponent implements AfterViewInit, OnDestroy {
-
+export class ECommerceVisitorsAnalyticsChartComponent
+  implements AfterViewInit, OnDestroy
+{
   private alive = true;
 
   @Input() chartData: {
@@ -29,26 +24,28 @@ export class ECommerceVisitorsAnalyticsChartComponent implements AfterViewInit, 
   themeSubscription: any;
   echartsIntance: any;
 
-  constructor(private theme: NbThemeService,
-              private layoutService: LayoutService) {
-    this.layoutService.onSafeChangeLayoutSize()
-      .pipe(
-        takeWhile(() => this.alive),
-      )
+  constructor(
+    private theme: NbThemeService,
+    private layoutService: LayoutService
+  ) {
+    this.layoutService
+      .onSafeChangeLayoutSize()
+      .pipe(takeWhile(() => this.alive))
       .subscribe(() => this.resizeChart());
   }
 
   ngAfterViewInit(): void {
-    this.theme.getJsTheme()
+    this.theme
+      .getJsTheme()
       .pipe(
         delay(1),
-        takeWhile(() => this.alive),
+        takeWhile(() => this.alive)
       )
-      .subscribe(config => {
+      .subscribe((config) => {
         const eTheme: any = config.variables.visitors;
 
         this.setOptions(eTheme);
-    });
+      });
   }
 
   setOptions(eTheme) {
@@ -60,9 +57,9 @@ export class ECommerceVisitorsAnalyticsChartComponent implements AfterViewInit, 
         bottom: 60,
       },
       tooltip: {
-        trigger: 'axis',
+        trigger: "axis",
         axisPointer: {
-          type: 'line',
+          type: "line",
           lineStyle: {
             color: eTheme.tooltipLineColor,
             width: eTheme.tooltipLineWidth,
@@ -73,7 +70,7 @@ export class ECommerceVisitorsAnalyticsChartComponent implements AfterViewInit, 
           fontSize: 20,
           fontWeight: eTheme.tooltipFontWeight,
         },
-        position: 'top',
+        position: "top",
         backgroundColor: eTheme.tooltipBg,
         borderColor: eTheme.tooltipBorderColor,
         borderWidth: 1,
@@ -83,10 +80,10 @@ export class ECommerceVisitorsAnalyticsChartComponent implements AfterViewInit, 
         extraCssText: eTheme.tooltipExtraCss,
       },
       xAxis: {
-        type: 'category',
+        type: "category",
         boundaryGap: false,
         offset: 25,
-        data: this.chartData.outerLine.map(i => i.label),
+        data: this.chartData.outerLine.map((i) => i.label),
         axisTick: {
           show: false,
         },
@@ -97,17 +94,17 @@ export class ECommerceVisitorsAnalyticsChartComponent implements AfterViewInit, 
         axisLine: {
           lineStyle: {
             color: eTheme.axisLineColor,
-            width: '2',
+            width: "2",
           },
         },
       },
       yAxis: {
-        type: 'value',
+        type: "value",
         boundaryGap: false,
         axisLine: {
           lineStyle: {
             color: eTheme.axisLineColor,
-            width: '1',
+            width: "1",
           },
         },
         axisLabel: {
@@ -118,23 +115,19 @@ export class ECommerceVisitorsAnalyticsChartComponent implements AfterViewInit, 
           show: false,
         },
         splitLine: {
-
           lineStyle: {
             color: eTheme.yAxisSplitLine,
-            width: '1',
+            width: "1",
           },
         },
       },
-      series: [
-        this.getInnerLine(eTheme),
-        this.getOuterLine(eTheme),
-      ],
+      series: [this.getInnerLine(eTheme), this.getOuterLine(eTheme)],
     };
   }
 
   getOuterLine(eTheme) {
     return {
-      type: 'line',
+      type: "line",
       smooth: true,
       symbolSize: 20,
       itemStyle: {
@@ -142,23 +135,26 @@ export class ECommerceVisitorsAnalyticsChartComponent implements AfterViewInit, 
           opacity: 0,
         },
         emphasis: {
-          color: '#ffffff',
-            borderColor: eTheme.itemBorderColor,
-            borderWidth: 2,
-            opacity: 1,
+          color: "#ffffff",
+          borderColor: eTheme.itemBorderColor,
+          borderWidth: 2,
+          opacity: 1,
         },
       },
       lineStyle: {
         normal: {
           width: eTheme.lineWidth,
           type: eTheme.lineStyle,
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-            offset: 0,
-            color: eTheme.lineGradFrom,
-          }, {
-            offset: 1,
-            color: eTheme.lineGradTo,
-          }]),
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            {
+              offset: 0,
+              color: eTheme.lineGradFrom,
+            },
+            {
+              offset: 1,
+              color: eTheme.lineGradTo,
+            },
+          ]),
           shadowColor: eTheme.lineShadow,
           shadowBlur: 6,
           shadowOffsetY: 12,
@@ -166,27 +162,30 @@ export class ECommerceVisitorsAnalyticsChartComponent implements AfterViewInit, 
       },
       areaStyle: {
         normal: {
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-            offset: 0,
-            color: eTheme.areaGradFrom,
-          }, {
-            offset: 1,
-            color: eTheme.areaGradTo,
-          }]),
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            {
+              offset: 0,
+              color: eTheme.areaGradFrom,
+            },
+            {
+              offset: 1,
+              color: eTheme.areaGradTo,
+            },
+          ]),
         },
       },
-      data: this.chartData.outerLine.map(i => i.value),
+      data: this.chartData.outerLine.map((i) => i.value),
     };
   }
 
   getInnerLine(eTheme) {
     return {
-      type: 'line',
+      type: "line",
       smooth: true,
       symbolSize: 20,
       tooltip: {
         show: false,
-        extraCssText: '',
+        extraCssText: "",
       },
       itemStyle: {
         normal: {
@@ -205,13 +204,16 @@ export class ECommerceVisitorsAnalyticsChartComponent implements AfterViewInit, 
       },
       areaStyle: {
         normal: {
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-            offset: 0,
-            color: eTheme.innerAreaGradFrom,
-          }, {
-            offset: 1,
-            color: eTheme.innerAreaGradTo,
-          }]),
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            {
+              offset: 0,
+              color: eTheme.innerAreaGradFrom,
+            },
+            {
+              offset: 1,
+              color: eTheme.innerAreaGradTo,
+            },
+          ]),
           opacity: 1,
         },
       },

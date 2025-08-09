@@ -1,19 +1,25 @@
-import { AfterViewInit, Component, Input, OnChanges, OnDestroy } from '@angular/core';
-import { NbThemeService } from '@nebular/theme';
-import { takeWhile } from 'rxjs/operators';
+import {
+  AfterViewInit,
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+} from "@angular/core";
+import { NbThemeService } from "@nebular/theme";
+import { takeWhile } from "rxjs/operators";
 
-import { ProfitChart } from '../../../../@core/data/profit-chart';
-import { LayoutService } from '../../../../@core/utils/layout.service';
+import { ProfitChart } from "../../../../@core/data/profit-chart";
+import { LayoutService } from "../../../../@core/utils/layout.service";
+import * as echarts from "echarts/types/dist/echarts";
 
 @Component({
-  selector: 'ngx-profit-chart',
-  styleUrls: ['./charts-common.component.scss'],
-  template: `
-    <div echarts [options]="options" class="echart" (chartInit)="onChartInit($event)"></div>
-  `,
+  selector: "ngx-profit-chart",
+  styleUrls: ["./charts-common.component.scss"],
+  template: ` <div></div> `,
 })
-export class ProfitChartComponent implements AfterViewInit, OnDestroy, OnChanges {
-
+export class ProfitChartComponent
+  implements AfterViewInit, OnDestroy, OnChanges
+{
   @Input()
   profitChartData: ProfitChart;
 
@@ -22,12 +28,13 @@ export class ProfitChartComponent implements AfterViewInit, OnDestroy, OnChanges
   echartsIntance: any;
   options: any = {};
 
-  constructor(private theme: NbThemeService,
-              private layoutService: LayoutService) {
-    this.layoutService.onSafeChangeLayoutSize()
-      .pipe(
-        takeWhile(() => this.alive),
-      )
+  constructor(
+    private theme: NbThemeService,
+    private layoutService: LayoutService
+  ) {
+    this.layoutService
+      .onSafeChangeLayoutSize()
+      .pipe(takeWhile(() => this.alive))
       .subscribe(() => this.resizeChart());
   }
 
@@ -38,9 +45,10 @@ export class ProfitChartComponent implements AfterViewInit, OnDestroy, OnChanges
   }
 
   ngAfterViewInit() {
-    this.theme.getJsTheme()
+    this.theme
+      .getJsTheme()
       .pipe(takeWhile(() => this.alive))
-      .subscribe(config => {
+      .subscribe((config) => {
         const eTheme: any = config.variables.profit;
 
         this.setOptions(eTheme);
@@ -51,23 +59,23 @@ export class ProfitChartComponent implements AfterViewInit, OnDestroy, OnChanges
     this.options = {
       backgroundColor: eTheme.bg,
       tooltip: {
-        trigger: 'axis',
+        trigger: "axis",
         axisPointer: {
-          type: 'shadow',
+          type: "shadow",
           shadowStyle: {
-            color: 'rgba(0, 0, 0, 0.3)',
+            color: "rgba(0, 0, 0, 0.3)",
           },
         },
       },
       grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
+        left: "3%",
+        right: "4%",
+        bottom: "3%",
         containLabel: true,
       },
       xAxis: [
         {
-          type: 'category',
+          type: "category",
           data: this.profitChartData.chartLabel,
           axisTick: {
             alignWithLabel: true,
@@ -85,7 +93,7 @@ export class ProfitChartComponent implements AfterViewInit, OnDestroy, OnChanges
       ],
       yAxis: [
         {
-          type: 'value',
+          type: "value",
           axisLine: {
             lineStyle: {
               color: eTheme.axisLineColor,
@@ -104,53 +112,62 @@ export class ProfitChartComponent implements AfterViewInit, OnDestroy, OnChanges
       ],
       series: [
         {
-          name: 'Canceled',
-          type: 'bar',
+          name: "Canceled",
+          type: "bar",
           barGap: 0,
-          barWidth: '20%',
+          barWidth: "20%",
           itemStyle: {
             normal: {
-              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                offset: 0,
-                color: eTheme.firstLineGradFrom,
-              }, {
-                offset: 1,
-                color: eTheme.firstLineGradTo,
-              }]),
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                {
+                  offset: 0,
+                  color: eTheme.firstLineGradFrom,
+                },
+                {
+                  offset: 1,
+                  color: eTheme.firstLineGradTo,
+                },
+              ]),
             },
           },
           data: this.profitChartData.data[0],
         },
         {
-          name: 'Payment',
-          type: 'bar',
-          barWidth: '20%',
+          name: "Payment",
+          type: "bar",
+          barWidth: "20%",
           itemStyle: {
             normal: {
-              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                offset: 0,
-                color: eTheme.secondLineGradFrom,
-              }, {
-                offset: 1,
-                color: eTheme.secondLineGradTo,
-              }]),
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                {
+                  offset: 0,
+                  color: eTheme.secondLineGradFrom,
+                },
+                {
+                  offset: 1,
+                  color: eTheme.secondLineGradTo,
+                },
+              ]),
             },
           },
           data: this.profitChartData.data[1],
         },
         {
-          name: 'All orders',
-          type: 'bar',
-          barWidth: '20%',
+          name: "All orders",
+          type: "bar",
+          barWidth: "20%",
           itemStyle: {
             normal: {
-              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                offset: 0,
-                color: eTheme.thirdLineGradFrom,
-              }, {
-                offset: 1,
-                color: eTheme.thirdLineGradTo,
-              }]),
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                {
+                  offset: 0,
+                  color: eTheme.thirdLineGradFrom,
+                },
+                {
+                  offset: 1,
+                  color: eTheme.thirdLineGradTo,
+                },
+              ]),
             },
           },
           data: this.profitChartData.data[2],

@@ -1,24 +1,25 @@
-import { AfterViewInit, Component, Input, OnChanges, OnDestroy } from '@angular/core';
-import { NbThemeService } from '@nebular/theme';
-import { delay, takeWhile } from 'rxjs/operators';
+import {
+  AfterViewInit,
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+} from "@angular/core";
+import { NbThemeService } from "@nebular/theme";
+import { delay, takeWhile } from "rxjs/operators";
 
-import { OrdersChart } from '../../../../@core/data/orders-chart';
-import { LayoutService } from '../../../../@core/utils/layout.service';
+import { OrdersChart } from "../../../../@core/data/orders-chart";
+import { LayoutService } from "../../../../@core/utils/layout.service";
+import * as echarts from "echarts/types/dist/echarts";
 
 @Component({
-  selector: 'ngx-orders-chart',
-  styleUrls: ['./charts-common.component.scss'],
-  template: `
-    <div echarts
-         [options]="option"
-         [merge]="option"
-         class="echart"
-         (chartInit)="onChartInit($event)">
-    </div>
-  `,
+  selector: "ngx-orders-chart",
+  styleUrls: ["./charts-common.component.scss"],
+  template: ` <div></div> `,
 })
-export class OrdersChartComponent implements AfterViewInit, OnDestroy, OnChanges {
-
+export class OrdersChartComponent
+  implements AfterViewInit, OnDestroy, OnChanges
+{
   @Input()
   ordersChartData: OrdersChart;
 
@@ -33,22 +34,24 @@ export class OrdersChartComponent implements AfterViewInit, OnDestroy, OnChanges
     }
   }
 
-  constructor(private theme: NbThemeService,
-              private layoutService: LayoutService) {
-    this.layoutService.onSafeChangeLayoutSize()
-      .pipe(
-        takeWhile(() => this.alive),
-      )
+  constructor(
+    private theme: NbThemeService,
+    private layoutService: LayoutService
+  ) {
+    this.layoutService
+      .onSafeChangeLayoutSize()
+      .pipe(takeWhile(() => this.alive))
       .subscribe(() => this.resizeChart());
   }
 
   ngAfterViewInit(): void {
-    this.theme.getJsTheme()
+    this.theme
+      .getJsTheme()
       .pipe(
         takeWhile(() => this.alive),
-        delay(1),
+        delay(1)
       )
-      .subscribe(config => {
+      .subscribe((config) => {
         const eTheme: any = config.variables.orders;
 
         this.setOptions(eTheme);
@@ -65,9 +68,9 @@ export class OrdersChartComponent implements AfterViewInit, OnDestroy, OnChanges
         bottom: 40,
       },
       tooltip: {
-        trigger: 'item',
+        trigger: "item",
         axisPointer: {
-          type: 'line',
+          type: "line",
           lineStyle: {
             color: eTheme.tooltipLineColor,
             width: eTheme.tooltipLineWidth,
@@ -78,7 +81,7 @@ export class OrdersChartComponent implements AfterViewInit, OnDestroy, OnChanges
           fontSize: eTheme.tooltipFontSize,
           fontWeight: eTheme.tooltipFontWeight,
         },
-        position: 'top',
+        position: "top",
         backgroundColor: eTheme.tooltipBg,
         borderColor: eTheme.tooltipBorderColor,
         borderWidth: 1,
@@ -88,7 +91,7 @@ export class OrdersChartComponent implements AfterViewInit, OnDestroy, OnChanges
         extraCssText: eTheme.tooltipExtraCss,
       },
       xAxis: {
-        type: 'category',
+        type: "category",
         boundaryGap: false,
         offset: 5,
         data: [],
@@ -102,17 +105,17 @@ export class OrdersChartComponent implements AfterViewInit, OnDestroy, OnChanges
         axisLine: {
           lineStyle: {
             color: eTheme.axisLineColor,
-            width: '2',
+            width: "2",
           },
         },
       },
       yAxis: {
-        type: 'value',
+        type: "value",
         boundaryGap: false,
         axisLine: {
           lineStyle: {
             color: eTheme.axisLineColor,
-            width: '1',
+            width: "1",
           },
         },
         axisLabel: {
@@ -123,10 +126,9 @@ export class OrdersChartComponent implements AfterViewInit, OnDestroy, OnChanges
           show: false,
         },
         splitLine: {
-
           lineStyle: {
             color: eTheme.yAxisSplitLine,
-            width: '1',
+            width: "1",
           },
         },
       },
@@ -140,7 +142,7 @@ export class OrdersChartComponent implements AfterViewInit, OnDestroy, OnChanges
 
   getFirstLine(eTheme) {
     return {
-      type: 'line',
+      type: "line",
       smooth: true,
       symbolSize: 20,
       itemStyle: {
@@ -158,13 +160,16 @@ export class OrdersChartComponent implements AfterViewInit, OnDestroy, OnChanges
       },
       areaStyle: {
         normal: {
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-            offset: 0,
-            color: eTheme.firstAreaGradFrom,
-          }, {
-            offset: 1,
-            color: eTheme.firstAreaGradTo,
-          }]),
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            {
+              offset: 0,
+              color: eTheme.firstAreaGradFrom,
+            },
+            {
+              offset: 1,
+              color: eTheme.firstAreaGradTo,
+            },
+          ]),
           opacity: 1,
         },
       },
@@ -173,8 +178,8 @@ export class OrdersChartComponent implements AfterViewInit, OnDestroy, OnChanges
   }
 
   getSecondLine(eTheme) {
-    return         {
-      type: 'line',
+    return {
+      type: "line",
       smooth: true,
       symbolSize: 20,
       itemStyle: {
@@ -182,7 +187,7 @@ export class OrdersChartComponent implements AfterViewInit, OnDestroy, OnChanges
           opacity: 0,
         },
         emphasis: {
-          color: '#ffffff',
+          color: "#ffffff",
           borderColor: eTheme.itemBorderColor,
           borderWidth: 2,
           opacity: 1,
@@ -192,24 +197,30 @@ export class OrdersChartComponent implements AfterViewInit, OnDestroy, OnChanges
         normal: {
           width: eTheme.lineWidth,
           type: eTheme.lineStyle,
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-            offset: 0,
-            color: eTheme.secondLineGradFrom,
-          }, {
-            offset: 1,
-            color: eTheme.secondLineGradTo,
-          }]),
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            {
+              offset: 0,
+              color: eTheme.secondLineGradFrom,
+            },
+            {
+              offset: 1,
+              color: eTheme.secondLineGradTo,
+            },
+          ]),
         },
       },
       areaStyle: {
         normal: {
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-            offset: 0,
-            color: eTheme.secondAreaGradFrom,
-          }, {
-            offset: 1,
-            color: eTheme.secondAreaGradTo,
-          }]),
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            {
+              offset: 0,
+              color: eTheme.secondAreaGradFrom,
+            },
+            {
+              offset: 1,
+              color: eTheme.secondAreaGradTo,
+            },
+          ]),
         },
       },
       data: [],
@@ -218,7 +229,7 @@ export class OrdersChartComponent implements AfterViewInit, OnDestroy, OnChanges
 
   getThirdLine(eTheme) {
     return {
-      type: 'line',
+      type: "line",
       smooth: true,
       symbolSize: 20,
       itemStyle: {
@@ -226,7 +237,7 @@ export class OrdersChartComponent implements AfterViewInit, OnDestroy, OnChanges
           opacity: 0,
         },
         emphasis: {
-          color: '#ffffff',
+          color: "#ffffff",
           borderColor: eTheme.itemBorderColor,
           borderWidth: 2,
           opacity: 1,
@@ -236,24 +247,30 @@ export class OrdersChartComponent implements AfterViewInit, OnDestroy, OnChanges
         normal: {
           width: eTheme.lineWidth,
           type: eTheme.lineStyle,
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-            offset: 0,
-            color: eTheme.thirdLineGradFrom,
-          }, {
-            offset: 1,
-            color: eTheme.thirdLineGradTo,
-          }]),
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            {
+              offset: 0,
+              color: eTheme.thirdLineGradFrom,
+            },
+            {
+              offset: 1,
+              color: eTheme.thirdLineGradTo,
+            },
+          ]),
         },
       },
       areaStyle: {
         normal: {
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-            offset: 0,
-            color: eTheme.thirdAreaGradFrom,
-          }, {
-            offset: 1,
-            color: eTheme.thirdAreaGradTo,
-          }]),
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            {
+              offset: 0,
+              color: eTheme.thirdAreaGradFrom,
+            },
+            {
+              offset: 1,
+              color: eTheme.thirdAreaGradTo,
+            },
+          ]),
         },
       },
       data: [],

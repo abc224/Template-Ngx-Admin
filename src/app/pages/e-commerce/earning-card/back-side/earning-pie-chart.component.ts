@@ -1,23 +1,27 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
-import { NbThemeService } from '@nebular/theme';
-import { delay, takeWhile } from 'rxjs/operators';
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  Output,
+} from "@angular/core";
+import { NbThemeService } from "@nebular/theme";
+import * as echarts from "echarts/types/dist/echarts";
+import { delay, takeWhile } from "rxjs/operators";
 
 @Component({
-  selector: 'ngx-earning-pie-chart',
-  styleUrls: ['./earning-card-back.component.scss'],
-  template: `
-    <div echarts
-         class="echart"
-         [options]="options"
-         (chartInit)="onChartInit($event)"
-         (chartClick)="onChartClick($event)">
-    </div>
-  `,
+  selector: "ngx-earning-pie-chart",
+  styleUrls: ["./earning-card-back.component.scss"],
+  template: ` <div></div> `,
 })
 export class EarningPieChartComponent implements AfterViewInit, OnDestroy {
-
-  @Output() selectPie = new EventEmitter<{value: number; name: string; color: string}>();
-  @Input() values: {value: number; name: string; }[];
+  @Output() selectPie = new EventEmitter<{
+    value: number;
+    name: string;
+    color: string;
+  }>();
+  @Input() values: { value: number; name: string }[];
   @Input() defaultSelectedCurrency: string;
 
   private alive = true;
@@ -25,8 +29,7 @@ export class EarningPieChartComponent implements AfterViewInit, OnDestroy {
   options: any = {};
   echartsInstance;
 
-  constructor(private theme: NbThemeService) {
-  }
+  constructor(private theme: NbThemeService) {}
 
   onChartInit(ec) {
     this.echartsInstance = ec;
@@ -42,23 +45,26 @@ export class EarningPieChartComponent implements AfterViewInit, OnDestroy {
     this.emitSelectPie(pieData);
   }
 
-  emitSelectPie(pieData: {value: number; name: string; color: any}) {
+  emitSelectPie(pieData: { value: number; name: string; color: any }) {
     this.selectPie.emit(pieData);
   }
 
   ngAfterViewInit() {
-    this.theme.getJsTheme()
+    this.theme
+      .getJsTheme()
       .pipe(
         takeWhile(() => this.alive),
-        delay(1),
+        delay(1)
       )
-      .subscribe(config => {
+      .subscribe((config) => {
         const variables = config.variables;
 
         this.options = this.getOptions(variables);
-        const defaultSelectedData =
-          this.options.series[0].data.find((item) => item.name === this.defaultSelectedCurrency);
-        const color = defaultSelectedData.itemStyle.normal.color.colorStops[0].color;
+        const defaultSelectedData = this.options.series[0].data.find(
+          (item) => item.name === this.defaultSelectedCurrency
+        );
+        const color =
+          defaultSelectedData.itemStyle.normal.color.colorStops[0].color;
         const pieData = {
           value: defaultSelectedData.value,
           name: defaultSelectedData.name,
@@ -74,15 +80,15 @@ export class EarningPieChartComponent implements AfterViewInit, OnDestroy {
 
     return {
       tooltip: {
-        trigger: 'item',
-        formatter: '',
+        trigger: "item",
+        formatter: "",
       },
       series: [
         {
-          name: ' ',
+          name: " ",
           clockWise: true,
           hoverAnimation: false,
-          type: 'pie',
+          type: "pie",
           center: earningPie.center,
           radius: earningPie.radius,
           data: [
@@ -91,12 +97,12 @@ export class EarningPieChartComponent implements AfterViewInit, OnDestroy {
               name: this.values[0].name,
               label: {
                 normal: {
-                  position: 'center',
-                  formatter: '',
+                  position: "center",
+                  formatter: "",
                   textStyle: {
-                    fontSize: '22',
+                    fontSize: "22",
                     fontFamily: variables.fontSecondary,
-                    fontWeight: '600',
+                    fontWeight: "600",
                     color: variables.fgHeading,
                   },
                 },
@@ -128,12 +134,12 @@ export class EarningPieChartComponent implements AfterViewInit, OnDestroy {
               name: this.values[1].name,
               label: {
                 normal: {
-                  position: 'center',
-                  formatter: '',
+                  position: "center",
+                  formatter: "",
                   textStyle: {
-                    fontSize: '22',
+                    fontSize: "22",
                     fontFamily: variables.fontSecondary,
-                    fontWeight: '600',
+                    fontWeight: "600",
                     color: variables.fgHeading,
                   },
                 },
@@ -165,12 +171,12 @@ export class EarningPieChartComponent implements AfterViewInit, OnDestroy {
               name: this.values[2].name,
               label: {
                 normal: {
-                  position: 'center',
-                  formatter: '',
+                  position: "center",
+                  formatter: "",
                   textStyle: {
-                    fontSize: '22',
+                    fontSize: "22",
                     fontFamily: variables.fontSecondary,
-                    fontWeight: '600',
+                    fontWeight: "600",
                     color: variables.fgHeading,
                   },
                 },
