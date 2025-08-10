@@ -21,6 +21,8 @@ import {
   NbToastrModule,
   NbWindowModule,
 } from "@nebular/theme";
+import { NgxEchartsModule } from "ngx-echarts";
+import { StatsBarAnimationChartComponent } from "./pages/e-commerce/profit-card/front-side/stats-bar-animation-chart.component";
 
 @NgModule({
   declarations: [AppComponent],
@@ -41,6 +43,9 @@ import {
     }),
     CoreModule.forRoot(),
     ThemeModule.forRoot(),
+    NgxEchartsModule.forRoot({
+      echarts: () => import("echarts"),
+    }),
   ],
   bootstrap: [AppComponent],
 })

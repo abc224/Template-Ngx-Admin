@@ -2,12 +2,20 @@ import { delay, takeWhile } from "rxjs/operators";
 import { AfterViewInit, Component, Input, OnDestroy } from "@angular/core";
 import { NbThemeService } from "@nebular/theme";
 import { LayoutService } from "../../../../@core/utils";
-import * as echarts from "echarts/types/dist/echarts";
+import * as echarts from "echarts";
+import { EChartsOption } from "echarts/types/dist/echarts";
 
 @Component({
   selector: "ngx-stats-ares-chart",
   styleUrls: ["stats-card-back.component.scss"],
-  template: ` <div></div> `,
+  template: `
+    <div
+      echarts
+      [options]="option"
+      class="echart"
+      (chartInit)="onChartInit($event)"
+    ></div>
+  `,
 })
 export class StatsAreaChartComponent implements AfterViewInit, OnDestroy {
   private alive = true;

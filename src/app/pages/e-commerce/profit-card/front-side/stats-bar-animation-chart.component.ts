@@ -2,10 +2,18 @@ import { AfterViewInit, Component, Input, OnDestroy } from "@angular/core";
 import { NbThemeService } from "@nebular/theme";
 import { takeWhile } from "rxjs/operators";
 import { LayoutService } from "../../../../@core/utils/layout.service";
+import { EChartsOption } from "echarts";
 
 @Component({
   selector: "ngx-stats-bar-animation-chart",
-  template: ` <div></div> `,
+  template: `
+    <div
+      echarts
+      [options]="options"
+      class="echart"
+      (chartInit)="onChartInit($event)"
+    ></div>
+  `,
 })
 export class StatsBarAnimationChartComponent
   implements AfterViewInit, OnDestroy
@@ -18,7 +26,24 @@ export class StatsBarAnimationChartComponent
   };
 
   echartsIntance: any;
-  options: any = {};
+  options: EChartsOption = {};
+  // options: EChartsOption = {
+  //   title: {
+  //     text: "Exemple ECharts",
+  //   },
+  //   tooltip: {},
+  //   xAxis: {
+  //     data: ["A", "B", "C", "D", "E"],
+  //   },
+  //   yAxis: {},
+  //   series: [
+  //     {
+  //       name: "Valeurs",
+  //       type: "bar",
+  //       data: [5, 20, 36, 10, 10],
+  //     },
+  //   ],
+  // };
 
   constructor(
     private theme: NbThemeService,

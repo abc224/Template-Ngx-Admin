@@ -3,12 +3,21 @@ import { AfterViewInit, Component, Input, OnDestroy } from "@angular/core";
 import { NbThemeService } from "@nebular/theme";
 import { LayoutService } from "../../../../@core/utils";
 import { OutlineData } from "../../../../@core/data/visitors-analytics";
-import * as echarts from "echarts/types/dist/echarts";
+//import * as echarts from "echarts/types/dist/echarts";
+import * as echarts from "echarts";
 
 @Component({
   selector: "ngx-visitors-analytics-chart",
   styleUrls: ["./visitors-analytics-chart.component.scss"],
-  template: ` <div></div> `,
+  template: `
+    <div
+      echarts
+      [options]="option"
+      [merge]="option"
+      class="echart"
+      (chartInit)="onChartInit($event)"
+    ></div>
+  `,
 })
 export class ECommerceVisitorsAnalyticsChartComponent
   implements AfterViewInit, OnDestroy

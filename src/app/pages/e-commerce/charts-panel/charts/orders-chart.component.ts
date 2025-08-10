@@ -10,12 +10,21 @@ import { delay, takeWhile } from "rxjs/operators";
 
 import { OrdersChart } from "../../../../@core/data/orders-chart";
 import { LayoutService } from "../../../../@core/utils/layout.service";
-import * as echarts from "echarts/types/dist/echarts";
+//import * as echarts from "echarts/types/dist/echarts";
+import * as echarts from "echarts";
 
 @Component({
   selector: "ngx-orders-chart",
   styleUrls: ["./charts-common.component.scss"],
-  template: ` <div></div> `,
+  template: `
+    <div
+      echarts
+      [options]="option"
+      [merge]="option"
+      class="echart"
+      (chartInit)="onChartInit($event)"
+    ></div>
+  `,
 })
 export class OrdersChartComponent
   implements AfterViewInit, OnDestroy, OnChanges

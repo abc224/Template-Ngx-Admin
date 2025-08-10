@@ -6,7 +6,14 @@ import * as echarts from "echarts/types/dist/echarts";
 
 @Component({
   selector: "ngx-traffic-chart",
-  template: ` <div></div> `,
+  template: `
+    <div
+      echarts
+      [options]="option"
+      class="echart"
+      (chartInit)="onChartInit($event)"
+    ></div>
+  `,
 })
 export class TrafficChartComponent implements AfterViewInit, OnDestroy {
   private alive = true;

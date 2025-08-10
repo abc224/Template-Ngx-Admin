@@ -3,7 +3,7 @@ import { NbThemeService } from "@nebular/theme";
 
 @Component({
   selector: "ngx-echarts-area-stack",
-  template: ` <div></div> `,
+  template: ` <div echarts [options]="options" class="echart"></div> `,
 })
 export class EchartsAreaStackComponent implements AfterViewInit, OnDestroy {
   options: any = {};

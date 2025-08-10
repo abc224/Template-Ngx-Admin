@@ -10,12 +10,22 @@ import { takeWhile } from "rxjs/operators";
 
 import { ProfitChart } from "../../../../@core/data/profit-chart";
 import { LayoutService } from "../../../../@core/utils/layout.service";
-import * as echarts from "echarts/types/dist/echarts";
+//import * as echarts from "echarts/types/dist/echarts";
+import * as echarts from "echarts";
+
+import { EChartsOption } from "echarts/types/dist/echarts";
 
 @Component({
   selector: "ngx-profit-chart",
   styleUrls: ["./charts-common.component.scss"],
-  template: ` <div></div> `,
+  template: `
+    <div
+      echarts
+      [options]="options"
+      class="echart"
+      (chartInit)="onChartInit($event)"
+    ></div>
+  `,
 })
 export class ProfitChartComponent
   implements AfterViewInit, OnDestroy, OnChanges
@@ -26,7 +36,7 @@ export class ProfitChartComponent
   private alive = true;
 
   echartsIntance: any;
-  options: any = {};
+  options: EChartsOption = {};
 
   constructor(
     private theme: NbThemeService,
@@ -117,19 +127,18 @@ export class ProfitChartComponent
           barGap: 0,
           barWidth: "20%",
           itemStyle: {
-            normal: {
-              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                {
-                  offset: 0,
-                  color: eTheme.firstLineGradFrom,
-                },
-                {
-                  offset: 1,
-                  color: eTheme.firstLineGradTo,
-                },
-              ]),
-            },
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              {
+                offset: 0,
+                color: eTheme.firstLineGradFrom,
+              },
+              {
+                offset: 1,
+                color: eTheme.firstLineGradTo,
+              },
+            ]),
           },
+
           data: this.profitChartData.data[0],
         },
         {
@@ -137,19 +146,18 @@ export class ProfitChartComponent
           type: "bar",
           barWidth: "20%",
           itemStyle: {
-            normal: {
-              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                {
-                  offset: 0,
-                  color: eTheme.secondLineGradFrom,
-                },
-                {
-                  offset: 1,
-                  color: eTheme.secondLineGradTo,
-                },
-              ]),
-            },
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              {
+                offset: 0,
+                color: eTheme.secondLineGradFrom,
+              },
+              {
+                offset: 1,
+                color: eTheme.secondLineGradTo,
+              },
+            ]),
           },
+
           data: this.profitChartData.data[1],
         },
         {
@@ -157,19 +165,18 @@ export class ProfitChartComponent
           type: "bar",
           barWidth: "20%",
           itemStyle: {
-            normal: {
-              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                {
-                  offset: 0,
-                  color: eTheme.thirdLineGradFrom,
-                },
-                {
-                  offset: 1,
-                  color: eTheme.thirdLineGradTo,
-                },
-              ]),
-            },
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              {
+                offset: 0,
+                color: eTheme.thirdLineGradFrom,
+              },
+              {
+                offset: 1,
+                color: eTheme.thirdLineGradTo,
+              },
+            ]),
           },
+
           data: this.profitChartData.data[2],
         },
       ],

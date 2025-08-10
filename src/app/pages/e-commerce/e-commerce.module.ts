@@ -69,6 +69,7 @@ import { ChartModule } from "../charts/charts.module";
     NgxChartsModule,
     LeafletModule,
     NbIconModule,
+    //NgxEchartsModule.forRoot({ echarts: () => import("echarts") }),
   ],
   declarations: [
     ECommerceComponent,
@@ -105,5 +106,6 @@ import { ChartModule } from "../charts/charts.module";
     EarningLiveUpdateChartComponent,
   ],
   providers: [CountryOrdersMapService],
+  exports: [],
 })
 export class ECommerceModule {}
